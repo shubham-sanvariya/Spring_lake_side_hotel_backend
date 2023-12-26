@@ -9,15 +9,15 @@ import java.util.List;
 @Data
 @NoArgsConstructor
 public class RoomResponse {
-    private Long Id;
+    private Long id;
     private String roomType;
     private BigDecimal roomPrice;
-    private boolean isBooked = false;
+    private boolean isBooked;
     private String photo;
     private List<BookingResponse> bookings;
 
     public RoomResponse(Long id, String roomType, BigDecimal roomPrice) {
-        Id = id;
+        this.id = id;
         this.roomType = roomType;
         this.roomPrice = roomPrice;
     }
@@ -27,7 +27,7 @@ public class RoomResponse {
                         boolean isBooked,
                         byte[] photoBytes,
                         List<BookingResponse> bookings) {
-        Id = id;
+        this.id = id;
         this.roomType = roomType;
         this.roomPrice = roomPrice;
         this.isBooked = isBooked;
