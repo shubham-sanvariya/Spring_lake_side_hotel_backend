@@ -1,6 +1,7 @@
 package com.hotel_project.lake_side_hotel.controller;
 
 import com.hotel_project.lake_side_hotel.exception.PhotoRetrievalException;
+import com.hotel_project.lake_side_hotel.exception.ResourceNotFoundException;
 import com.hotel_project.lake_side_hotel.model.BookedRoom;
 import com.hotel_project.lake_side_hotel.model.Room;
 import com.hotel_project.lake_side_hotel.response.BookingResponse;
@@ -14,12 +15,14 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.sql.rowset.serial.SerialBlob;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.sql.Blob;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequiredArgsConstructor
@@ -51,7 +54,7 @@ public class RoomController {
         List<RoomResponse> roomResponses = new ArrayList<>();
         for (Room room : rooms) {
             byte[] photoByte = roomService.getRoomPhotoByRoomId(room.getId());
-            if (photoByte != null && photoByte.length > 0){
+            if (photoByte != null && photoByte.length > 0) {
                 String base64Photo = Base64.encodeBase64String(photoByte);
                 RoomResponse roomResponse = getRoomResponse(room);
                 roomResponse.setPhoto(base64Photo);
@@ -72,10 +75,10 @@ public class RoomController {
 
         byte[] photoBytes = null;
         Blob photoBlob = room.getPhoto();
-        if (photoBlob != null){
-            try{
-                photoBytes = photoBlob.getBytes(1,(int) photoBlob.length());
-            }catch (SQLException e){
+        if (photoBlob != null) {
+            try {
+                photoBytes = photoBlob.getBytes(1, (int) photoBlob.length());
+            } catch (SQLException e) {
                 throw new PhotoRetrievalException("Error retrieving photo");
             }
         }
@@ -91,8 +94,26 @@ public class RoomController {
     }
 
     @DeleteMapping("/delete/room/{roomId}")
-    public ResponseEntity<Void> deleteRoom(@PathVariable("roomId") Long roomId){
+    public ResponseEntity<Void> deleteRoom(@PathVariable("roomId") Long roomId) {
         roomService.deleteRoom(roomId);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+
+    @PutMapping("/update/{roomId}")
+    public ResponseEntity<RoomResponse> updateRoom(@PathVariable Long roomId,
+                                                   @RequestParam(required = false) String roomType,
+                                                   @RequestParam(required = false) BigDecimal roomPrice,
+                                                   @RequestParam(required = false) MultipartFile photo)
+            throws SQLException, IOException {
+        byte[] photoBytes = photo != null && !photo.isEmpty()?
+                photo.getBytes() : roomService.getRoomPhotoByRoomId(roomId);
+
+        Blob photoBlob = photoBytes != null && photoBytes.length > 0
+                ? new SerialBlob(photoBytes) : null;
+
+        Room theRoom = roomService.updateRoom(roomId,roomType,roomPrice,photoBytes);
+        theRoom.setPhoto(photoBlob);
+        RoomResponse roomResponse = getRoomResponse(theRoom);
+        return ResponseEntity.ok(roomResponse);
     }
 }
