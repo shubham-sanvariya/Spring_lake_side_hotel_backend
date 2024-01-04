@@ -11,4 +11,24 @@ public class IBookingServiceImpl implements IBookingService {
     public List<BookedRoom> getAllBookingsByRoomId(Long roomId) {
         return null;
     }
+
+    @Override
+    public List<BookedRoom> getAllBookings() {
+        return null;
+    }
+
+    @Override
+    public BookedRoom findByBookingConfirmationCode(String confirmationCode) {
+        return null;
+    }
+
+    @Override
+    public String saveBooking(Long roomId, BookedRoom bookingRequest) {
+        return null;
+    }
+
+    @Override
+    public void cancelBooking(Long bookingId) {
+
+    }
 }
