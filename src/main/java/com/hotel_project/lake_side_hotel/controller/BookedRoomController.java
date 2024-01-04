@@ -3,8 +3,11 @@ package com.hotel_project.lake_side_hotel.controller;
 import com.hotel_project.lake_side_hotel.exception.InvalidBookingRequestException;
 import com.hotel_project.lake_side_hotel.exception.ResourceNotFoundException;
 import com.hotel_project.lake_side_hotel.model.BookedRoom;
+import com.hotel_project.lake_side_hotel.model.Room;
 import com.hotel_project.lake_side_hotel.response.BookingResponse;
+import com.hotel_project.lake_side_hotel.response.RoomResponse;
 import com.hotel_project.lake_side_hotel.service.IBookingService;
+import com.hotel_project.lake_side_hotel.service.IRoomService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,6 +21,7 @@ import java.util.List;
 @RequestMapping("/bookings")
 public class BookedRoomController {
     private final IBookingService bookingService;
+    private final IRoomService roomService;
 
     @GetMapping("/all-bookings")
     public ResponseEntity<List<BookingResponse>> getAllBookings(){
@@ -28,6 +32,24 @@ public class BookedRoomController {
             bookingResponses.add(bookingResponse);
         }
         return ResponseEntity.ok(bookingResponses);
+    }
+
+    private BookingResponse getBookingResponse(BookedRoom booking) {
+        Room theRoom = roomService.getRoomById(booking.getRoom().getId()).get();
+        RoomResponse room = new RoomResponse(
+                theRoom.getId(),
+                theRoom.getRoomType(),
+                theRoom.getRoomPrice());
+        return new BookingResponse(
+                booking.getBookingId(),
+                booking.getCheckInDate(),
+                booking.getCheckOutDate(),
+                booking.getGuestFullName(),
+                booking.getGuestEmail(),
+                booking.getNumOfAdults(),
+                booking.getNumOfChildren(),
+                booking.getTotalNumOfGuest(),
+                booking.getBookingConfirmationCode(),room);
     }
 
     @GetMapping("/confirmation/{confirmationCode")
@@ -52,5 +74,10 @@ public class BookedRoomController {
         }catch (InvalidBookingRequestException e){
             return ResponseEntity.badRequest().body(e.getMessage());
         }
+    }
+
+    @DeleteMapping("/booking/{bookingId}/delete")
+    public void cancelBooking(@PathVariable Long bookingId){
+        bookingService.cancelBooking(bookingId);
     }
 }
