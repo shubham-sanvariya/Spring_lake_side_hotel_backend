@@ -12,19 +12,14 @@ import java.util.List;
 public class IBookingServiceImpl implements IBookingService {
 
     private final BookingRepository bookingRepository;
-    @Override
-    public List<BookedRoom> getAllBookingsByRoomId(Long roomId) {
-        return null;
-    }
 
     @Override
     public List<BookedRoom> getAllBookings() {
         return bookingRepository.findAll();
     }
-
     @Override
-    public BookedRoom findByBookingConfirmationCode(String confirmationCode) {
-        return null;
+    public List<BookedRoom> getAllBookingsByRoomId(Long roomId) {
+        return bookingRepository.findByRoomId(roomId);
     }
 
     @Override
