@@ -4,9 +4,8 @@ import com.hotel_project.lake_side_hotel.exception.PhotoRetrievalException;
 import com.hotel_project.lake_side_hotel.exception.ResourceNotFoundException;
 import com.hotel_project.lake_side_hotel.model.BookedRoom;
 import com.hotel_project.lake_side_hotel.model.Room;
-import com.hotel_project.lake_side_hotel.response.BookingResponse;
 import com.hotel_project.lake_side_hotel.response.RoomResponse;
-import com.hotel_project.lake_side_hotel.service.BookingService;
+import com.hotel_project.lake_side_hotel.service.IBookingService;
 import com.hotel_project.lake_side_hotel.service.IRoomService;
 import lombok.RequiredArgsConstructor;
 import org.apache.tomcat.util.codec.binary.Base64;
@@ -30,7 +29,7 @@ import java.util.Optional;
 public class RoomController {
 
     private final IRoomService roomService;
-    private final BookingService bookingService;
+    private final IBookingService bookingService;
 
     @PostMapping("/add/new-room")
     public ResponseEntity<RoomResponse> addNewRoom(
