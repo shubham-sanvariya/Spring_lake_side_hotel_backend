@@ -19,7 +19,7 @@ public class IBookingServiceImpl implements IBookingService {
 
     @Override
     public List<BookedRoom> getAllBookings() {
-        return null;
+        return bookingRepository.findAll();
     }
 
     @Override
