@@ -31,4 +31,15 @@ public class BookedRoomController {
         }
         return ResponseEntity.ok(bookingResponses);
     }
+
+    @GetMapping("/confirmation/{confirmationCode")
+    public ResponseEntity<?> getBookingByConfirmationCode(@PathVariable String confirmationCode){
+        try {
+            BookedRoom booking = bookingService.findByBookingConfirmationCode(confirmationCode);
+            BookingResponse bookingResponse = getBookingResponse(booking);
+            return ResponseEntity.ok(bookingResponse);
+        }catch (ResourceNotFoundException e){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        }
+    }
 }
