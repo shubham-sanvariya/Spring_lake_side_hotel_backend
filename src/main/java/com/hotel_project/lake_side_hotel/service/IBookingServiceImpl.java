@@ -1,12 +1,17 @@
 package com.hotel_project.lake_side_hotel.service;
 
 import com.hotel_project.lake_side_hotel.model.BookedRoom;
+import com.hotel_project.lake_side_hotel.repository.BookingRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
+@RequiredArgsConstructor
 public class IBookingServiceImpl implements IBookingService {
+
+    private final BookingRepository bookingRepository;
     @Override
     public List<BookedRoom> getAllBookingsByRoomId(Long roomId) {
         return null;
@@ -29,6 +34,6 @@ public class IBookingServiceImpl implements IBookingService {
 
     @Override
     public void cancelBooking(Long bookingId) {
-
+        bookingRepository.deleteById(bookingId);
     }
 }
