@@ -23,7 +23,7 @@ public class IBookingServiceImpl implements IBookingService {
 
     @Override
     public BookedRoom findByBookingConfirmationCode(String confirmationCode) {
-        return null;
+        return bookingRepository.findByBookingConfirmationCode(confirmationCode);
     }
 
     @Override
