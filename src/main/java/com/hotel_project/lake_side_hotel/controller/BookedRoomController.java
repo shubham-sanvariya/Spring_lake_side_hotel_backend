@@ -52,7 +52,7 @@ public class BookedRoomController {
                 booking.getBookingConfirmationCode(),room);
     }
 
-    @GetMapping("/confirmation/{confirmationCode")
+    @GetMapping("/confirmation/{confirmationCode}")
     public ResponseEntity<?> getBookingByConfirmationCode(@PathVariable String confirmationCode){
         try {
             BookedRoom booking = bookingService.findByBookingConfirmationCode(confirmationCode);
