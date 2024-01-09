@@ -1,6 +1,7 @@
 package com.hotel_project.lake_side_hotel.service;
 
 import com.hotel_project.lake_side_hotel.exception.InvalidBookingRequestException;
+import com.hotel_project.lake_side_hotel.exception.ResourceNotFoundException;
 import com.hotel_project.lake_side_hotel.model.BookedRoom;
 import com.hotel_project.lake_side_hotel.model.Room;
 import com.hotel_project.lake_side_hotel.repository.BookingRepository;
@@ -23,7 +24,8 @@ public class IBookingServiceImpl implements IBookingService {
 
     @Override
     public BookedRoom findByBookingConfirmationCode(String confirmationCode) {
-        return bookingRepository.findByBookingConfirmationCode(confirmationCode);
+        return bookingRepository.findByBookingConfirmationCode(confirmationCode)
+                .orElseThrow(() -> new ResourceNotFoundException("No booking found with booking code : " +confirmationCode));
     }
 
     @Override
