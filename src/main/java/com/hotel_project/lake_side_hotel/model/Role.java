@@ -22,4 +22,9 @@ public class Role {
     private Long id;
     private String name;
     private Collection<User> users = new HashSet<>();
+
+    public void assignRoleToUser(User user){
+        user.getRoles().add(this);
+        this.getUsers().add(user);
+    }
 }
