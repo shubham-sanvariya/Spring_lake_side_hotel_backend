@@ -6,5 +6,6 @@ import com.hotel_project.lake_side_hotel.model.User;
 import java.util.List;
 
 public interface IUserService {
-    User registerUser(User user) throws UserAlreadyExistsException;
+    User registerUser(User user);
+    List<User> getUsers();
 }
