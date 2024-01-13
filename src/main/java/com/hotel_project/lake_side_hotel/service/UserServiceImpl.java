@@ -7,6 +7,7 @@ import com.hotel_project.lake_side_hotel.repository.RoleRepository;
 import com.hotel_project.lake_side_hotel.repository.UserRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -39,5 +40,11 @@ public class UserServiceImpl implements IUserService{
     @Override
     public void deleteUser(String email) {
         userRepository.deleteByEmail(email);
+    }
+
+    @Override
+    public User getUser(String email) {
+        return userRepository.findByEmail(email).
+                orElseThrow(() -> new UsernameNotFoundException("User not found"));
     }
 }
