@@ -5,6 +5,7 @@ import com.hotel_project.lake_side_hotel.model.Role;
 import com.hotel_project.lake_side_hotel.model.User;
 import com.hotel_project.lake_side_hotel.repository.RoleRepository;
 import com.hotel_project.lake_side_hotel.repository.UserRepository;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -32,5 +33,11 @@ public class UserServiceImpl implements IUserService{
     @Override
     public List<User> getUsers() {
         return userRepository.findAll();
+    }
+
+    @Transactional
+    @Override
+    public void deleteUser(String email) {
+        userRepository.deleteByEmail(email);
     }
 }
