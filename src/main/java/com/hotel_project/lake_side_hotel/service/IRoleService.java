@@ -13,4 +13,5 @@ public interface IRoleService {
     void deleteRole(Long id);
     Role removeAllUsersFromRole(Long roleId);
     User removeUserFromRole(Long UserId, Long roleId);
+    User assignRoleToUser(Long UserId, Long roleId);
 }

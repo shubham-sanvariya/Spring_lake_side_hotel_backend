@@ -1,6 +1,7 @@
 package com.hotel_project.lake_side_hotel.service;
 
 import com.hotel_project.lake_side_hotel.exception.RoleAlreadyExistsException;
+import com.hotel_project.lake_side_hotel.exception.UserAlreadyExistsException;
 import com.hotel_project.lake_side_hotel.model.Role;
 import com.hotel_project.lake_side_hotel.model.User;
 import com.hotel_project.lake_side_hotel.repository.RoleRepository;
@@ -43,11 +44,6 @@ public class RoleServiceImpl implements IRoleService{
     }
 
     @Override
-    public Role removeAllUsersFromRole(Long roleId) {
-        return null;
-    }
-
-    @Override
     public User removeUserFromRole(Long userId, Long roleId) {
         Optional<User>  user = userRepository.findById(userId);
         Optional<Role>  role = roleRepository.findById(roleId);
@@ -59,4 +55,25 @@ public class RoleServiceImpl implements IRoleService{
         throw new UsernameNotFoundException("User not found");
     }
 
+    @Override
+    public User assignRoleToUser(Long userId, Long roleId) {
+        Optional<User>  user = userRepository.findById(userId);
+        Optional<Role>  role = roleRepository.findById(roleId);
+        if (user.isPresent() && user.get().getRoles().contains(role.get())){
+            throw new UserAlreadyExistsException(
+                    user.get().getFirstName() + " is already assigned to the "
+                            + role.get().getName() + " role"
+            );
+        }
+        if (role.isPresent()){
+            role.get().assignRoleToUser(user.get());
+            roleRepository.save(role.get());
+        }
+        return user.get();
+    }
+
+    @Override
+    public Role removeAllUsersFromRole(Long roleId) {
+        return null;
+    }
 }
