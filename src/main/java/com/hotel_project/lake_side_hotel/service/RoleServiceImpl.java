@@ -31,4 +31,15 @@ public class RoleServiceImpl implements IRoleService{
         return roleRepository.findByName(name).get();
     }
 
+    @Override
+    public void deleteRole(Long roleId) {
+        this.removeAllUsersFromRole(roleId);
+        roleRepository.deleteById(roleId);
+    }
+
+    @Override
+    public Role removeAllUsersFromRole(Long roleId) {
+        return null;
+    }
+
 }
