@@ -8,10 +8,7 @@ import static org.springframework.http.HttpStatus.FOUND;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -24,5 +21,15 @@ public class RoleController {
     @GetMapping("/all")
     public ResponseEntity<List<Role>> getAllRoles(){
         return new ResponseEntity(roleService.getRoles(), FOUND);
+    }
+
+    @PostMapping("/create-new-role")
+    public ResponseEntity<String> createRole(@RequestBody Role theRole){
+        try {
+            roleService.createRole(theRole);
+            return ResponseEntity.ok("New role created successfully");
+        }catch (RoleAlreadyExistsException e){
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(e.getMessage());
+        }
     }
 }
