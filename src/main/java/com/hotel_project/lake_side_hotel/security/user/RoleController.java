@@ -19,9 +19,9 @@ import java.util.List;
 public class RoleController {
     private final IRoleService roleService;
 
-    @GetMapping("/all")
+    @GetMapping("/all-roles")
     public ResponseEntity<List<Role>> getAllRoles(){
-        return new ResponseEntity(roleService.getRoles(), FOUND);
+        return new ResponseEntity<>(roleService.getRoles(), FOUND);
     }
 
     @PostMapping("/create-new-role")
@@ -48,5 +48,10 @@ public class RoleController {
     public User removeUserFromRole(@RequestParam("userId") Long userId,
                                    @RequestParam("roleId") Long roleId){
         return roleService.removeUserFromRole(userId,roleId);
+    }
+    @PostMapping("/assign-user-to-role")
+    public User assignUserToRole(@RequestParam("userId") Long userId,
+                                 @RequestParam("roleId") Long roleId){
+        return roleService.assignRoleToUser(userId,roleId);
     }
 }
