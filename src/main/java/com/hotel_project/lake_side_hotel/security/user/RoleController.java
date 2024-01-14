@@ -2,6 +2,7 @@ package com.hotel_project.lake_side_hotel.security.user;
 
 import com.hotel_project.lake_side_hotel.exception.RoleAlreadyExistsException;
 import com.hotel_project.lake_side_hotel.model.Role;
+import com.hotel_project.lake_side_hotel.model.User;
 import com.hotel_project.lake_side_hotel.service.IRoleService;
 import lombok.RequiredArgsConstructor;
 import static org.springframework.http.HttpStatus.FOUND;
@@ -41,5 +42,11 @@ public class RoleController {
     @PostMapping("/remove-all-users-from-role/{roleId}")
     public Role removeAllUsersFromRole(@PathVariable("roleId") Long roleId){
         return roleService.removeAllUsersFromRole(roleId);
+    }
+
+    @PostMapping("/remove-user-from-role")
+    public User removeUserFromRole(@RequestParam("userId") Long userId,
+                                   @RequestParam("roleId") Long roleId){
+        return roleService.removeUserFromRole(userId,roleId);
     }
 }
