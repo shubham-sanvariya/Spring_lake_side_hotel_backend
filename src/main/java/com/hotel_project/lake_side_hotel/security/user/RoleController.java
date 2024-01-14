@@ -32,4 +32,9 @@ public class RoleController {
             return ResponseEntity.status(HttpStatus.CONFLICT).body(e.getMessage());
         }
     }
+
+    @DeleteMapping("/delete/{roleId}")
+    public void deleteRole(@PathVariable("roleId") Long roleId){
+        roleService.deleteRole(roleId);
+    }
 }
