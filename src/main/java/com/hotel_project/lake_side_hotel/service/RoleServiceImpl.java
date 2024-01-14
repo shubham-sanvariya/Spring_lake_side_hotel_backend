@@ -8,10 +8,12 @@ import com.hotel_project.lake_side_hotel.repository.RoleRepository;
 import com.hotel_project.lake_side_hotel.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
 
+@Service
 @RequiredArgsConstructor
 public class RoleServiceImpl implements IRoleService{
     private final RoleRepository roleRepository;
