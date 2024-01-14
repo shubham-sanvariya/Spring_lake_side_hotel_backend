@@ -25,4 +25,10 @@ public class RoleServiceImpl implements IRoleService{
         }
         return roleRepository.save(role);
     }
+
+    @Override
+    public Role findByName(String name) {
+        return roleRepository.findByName(name).get();
+    }
+
 }

@@ -10,4 +10,5 @@ public interface IRoleService {
     List<Role> getRoles();
     Role createRole(Role theRole);
 
+    Role findByName(String name);
 }
