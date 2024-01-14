@@ -18,8 +18,13 @@ public class Role {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String name;
+
     @ManyToMany(mappedBy = "roles")
     private Collection<User> users = new HashSet<>();
+
+    public Role(String name) {
+        this.name = name;
+    }
 
     public void assignRoleToUser(User user){
         user.getRoles().add(this);
