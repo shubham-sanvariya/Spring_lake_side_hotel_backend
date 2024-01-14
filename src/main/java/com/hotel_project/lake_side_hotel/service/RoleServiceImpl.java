@@ -2,14 +2,19 @@ package com.hotel_project.lake_side_hotel.service;
 
 import com.hotel_project.lake_side_hotel.exception.RoleAlreadyExistsException;
 import com.hotel_project.lake_side_hotel.model.Role;
+import com.hotel_project.lake_side_hotel.model.User;
 import com.hotel_project.lake_side_hotel.repository.RoleRepository;
+import com.hotel_project.lake_side_hotel.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
 import java.util.List;
+import java.util.Optional;
 
 @RequiredArgsConstructor
 public class RoleServiceImpl implements IRoleService{
     private final RoleRepository roleRepository;
+    private final UserRepository userRepository;
 
     @Override
     public List<Role> getRoles() {
@@ -40,6 +45,18 @@ public class RoleServiceImpl implements IRoleService{
     @Override
     public Role removeAllUsersFromRole(Long roleId) {
         return null;
+    }
+
+    @Override
+    public User removeUserFromRole(Long userId, Long roleId) {
+        Optional<User>  user = userRepository.findById(userId);
+        Optional<Role>  role = roleRepository.findById(roleId);
+        if (role.isPresent() && role.get().getUsers().contains(user.get())){
+            role.get().removeUserFromRole(user.get());
+            roleRepository.save(role.get());
+            return user.get();
+        }
+        throw new UsernameNotFoundException("User not found");
     }
 
 }

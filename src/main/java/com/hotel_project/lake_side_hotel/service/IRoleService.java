@@ -12,4 +12,5 @@ public interface IRoleService {
     Role findByName(String name);
     void deleteRole(Long id);
     Role removeAllUsersFromRole(Long roleId);
+    User removeUserFromRole(Long UserId, Long roleId);
 }
