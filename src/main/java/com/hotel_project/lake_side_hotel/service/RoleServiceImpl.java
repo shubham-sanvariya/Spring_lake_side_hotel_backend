@@ -74,6 +74,8 @@ public class RoleServiceImpl implements IRoleService{
 
     @Override
     public Role removeAllUsersFromRole(Long roleId) {
-        return null;
+        Optional<Role> role = roleRepository.findById(roleId);
+        role.get().removeAllUserFromRole();
+        return roleRepository.save(role.get());
     }
 }
