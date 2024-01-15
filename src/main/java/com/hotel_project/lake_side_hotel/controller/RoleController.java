@@ -1,4 +1,4 @@
-package com.hotel_project.lake_side_hotel.security.user;
+package com.hotel_project.lake_side_hotel.controller;
 
 import com.hotel_project.lake_side_hotel.exception.RoleAlreadyExistsException;
 import com.hotel_project.lake_side_hotel.model.Role;
