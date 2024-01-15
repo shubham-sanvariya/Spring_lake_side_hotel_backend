@@ -22,7 +22,7 @@ public class UserServiceImpl implements IUserService{
     private final RoleRepository roleRepository;
     @Override
     public User registerUser(User user){
-        if (userRepository.existByEmail(user.getEmail())){
+        if (userRepository.existsByEmail(user.getEmail())){
             throw new UserAlreadyExistsException(user.getEmail() + "already exists");
         }
         user.setPassword(passwordEncoder.encode(user.getPassword()));
