@@ -4,6 +4,7 @@ import com.hotel_project.lake_side_hotel.exception.PhotoRetrievalException;
 import com.hotel_project.lake_side_hotel.exception.ResourceNotFoundException;
 import com.hotel_project.lake_side_hotel.model.BookedRoom;
 import com.hotel_project.lake_side_hotel.model.Room;
+import com.hotel_project.lake_side_hotel.response.BookingResponse;
 import com.hotel_project.lake_side_hotel.response.RoomResponse;
 import com.hotel_project.lake_side_hotel.service.IBookingService;
 import com.hotel_project.lake_side_hotel.service.IRoomService;
@@ -12,6 +13,7 @@ import org.apache.tomcat.util.codec.binary.Base64;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -34,6 +36,7 @@ public class RoomController {
     private final IBookingService bookingService;
 
     @PostMapping("/add/new-room")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ResponseEntity<RoomResponse> addNewRoom(
             @RequestParam("photo") MultipartFile photo,
             @RequestParam("roomType") String roomType,
@@ -67,13 +70,11 @@ public class RoomController {
 
     private RoomResponse getRoomResponse(Room room) {
         List<BookedRoom> bookings = getAllBookingsByRoomId(room.getId());
-//        List<BookingResponse> bookingInfo = bookings
-//                .stream()
-//                .map(booking -> new BookingResponse(booking.getBookingId(),
-//                        booking.getCheckInDate(),
-//                        booking.getCheckOutDate(),
-//                        booking.getBookingConfirmationCode())).toList();
-
+        List<BookingResponse> bookingInfo = bookings
+                .stream()
+                .map(booking -> new BookingResponse(booking.getBookingId(),
+                        booking.getCheckInDate(),
+                        booking.getCheckOutDate(), booking.getBookingConfirmationCode())).toList();
         byte[] photoBytes = null;
         Blob photoBlob = room.getPhoto();
         if (photoBlob != null) {
@@ -84,10 +85,8 @@ public class RoomController {
             }
         }
         return new RoomResponse(room.getId(),
-                room.getRoomType(),
-                room.getRoomPrice(),
-                room.isBooked(),
-                photoBytes);
+                room.getRoomType(), room.getRoomPrice(),
+                room.isBooked(), photoBytes, bookingInfo);
     }
 
     private List<BookedRoom> getAllBookingsByRoomId(Long roomID) {
@@ -95,6 +94,7 @@ public class RoomController {
     }
 
     @DeleteMapping("/delete/room/{roomId}")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ResponseEntity<Void> deleteRoom(@PathVariable("roomId") Long roomId) {
         roomService.deleteRoom(roomId);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
@@ -124,6 +124,7 @@ public class RoomController {
     }
 
     @PutMapping("/update/{roomId}")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ResponseEntity<RoomResponse> updateRoom(@PathVariable Long roomId,
                                                    @RequestParam(required = false) String roomType,
                                                    @RequestParam(required = false) BigDecimal roomPrice,
