@@ -77,4 +77,9 @@ public class IBookingServiceImpl implements IBookingService {
     public void cancelBooking(Long bookingId) {
         bookingRepository.deleteById(bookingId);
     }
+
+    @Override
+    public List<BookedRoom> getBookingsByUserEmail(String email) {
+        return bookingRepository.findByGuestEmail(email);
+    }
 }
